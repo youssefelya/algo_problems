@@ -1,27 +1,26 @@
+import java.util.Arrays;
 
 public class Solution {
 
-//https://leetcode.com/problems/random-pick-with-weight/submissions/
+
     public static void main(String[] args) {
 
     }
 
-    int[] w_sum;
-    public Solution(int[] w) {
-        w_sum = new int[w.length];
-        int sum = 0;
-        for(int i = 0; i < w.length; i++){
-            sum += w[i];
-            w_sum[i] = sum;
-        }
+
+    public int rob(int[] nums) {
+        int[] dp = new int[nums.length];
+        Arrays.fill(dp, -1);
+        return helper(nums, 0, dp);
     }
 
-    public int pickIndex() {
-        double target = w_sum[w_sum.length - 1] * Math.random();
-        for(int i = 0; i < w_sum.length; i++){
-            if(target < w_sum[i]) return i;
-        }
-        return -1;
+    int helper(int[] nums, int i, int[] dp) {
+        if (i >= nums.length) return 0;
+        if (dp[i] != -1)
+            return dp[i];
+        dp[i] = Math.max(nums[i] + helper(nums, i + 2, dp), helper(nums, i + 1, dp));
+        return dp[i];
     }
+
 
 }
