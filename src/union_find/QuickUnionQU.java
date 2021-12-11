@@ -28,8 +28,7 @@ public class QuickUnionQU {
         id[i] = j;
     }
 
-    // to make the root of every tree balance !!
-    // to avoid that
+    // The depth of any node is at most log(N)
     public void unionQ(int p, int q) {
         int i = root(p);
         int j = root(q);
