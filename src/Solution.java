@@ -1,22 +1,15 @@
-import edu.princeton.cs.algs4.In;
+
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.PriorityQueue;
 
 public class Solution {
 
 
     public static void main(String[] args) {
-        MyCalendarTwo();
-        System.out.println(book(10,20));
-        System.out.println(book(50,60));
-        System.out.println(book(10,40));
-        System.out.println(book(5,15));
-        System.out.println(book(5,10));
-        System.out.println(book(25,55));
-        //    [5, 10], [25, 55]
+        String abc = "abc";
+        String cde = null;
+        System.out.println("abc".equalsIgnoreCase(cde));
 
     }
 
