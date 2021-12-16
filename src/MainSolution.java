@@ -2,57 +2,53 @@ import data_struct.ListNode;
 import data_struct.TreeNode;
 import edu.princeton.cs.algs4.In;
 
-import java.util.ArrayDeque;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 public class MainSolution {
 
     public static void main(String[] args) {
-
-
-    }
-
-    int[] times;
-    Map<Integer, Integer> map;
-
-    public void TopVotedCandidate(int[] persons, int[] times) {
-        this.times = times;
-        map = new HashMap<>();
-        for (int i = 0; i < times.length; i++)
-            map.put(times[i], persons[i]);
+        int n = 4;
+        int[][] mat = {{1, 0}, {1, 2}, {1, 3}};
+        System.out.println(findMinHeightTrees(n, mat));
 
     }
 
-    public int q(int t) {
-        int index = findIndex(times, t);
-        return map.get(times[index]);
-    }
 
-    int findIndex(int[] nums, int target) {
-        int left = 0;
-        int right = nums.length - 1;
-        while (left <= right) {
-            int mid = left + (right - left) / 2;
-            if (nums[mid] == target) return mid;
-            else if (nums[mid] <= target) left++;
-            else if (nums[mid] >= target) right--;
+    public static List<Integer> findMinHeightTrees(int n, int[][] edges) {
+        Map<Integer, List<Integer>> graph = new HashMap<>();
+        int size = edges.length;
+        for (int i = 0; i < size; i++) {
+            graph.computeIfAbsent(edges[i][0], x -> new ArrayList<>());
+            graph.computeIfAbsent(edges[i][1], x -> new ArrayList<>());
+            graph.get(edges[i][0]).add(edges[i][1]);
+            graph.get(edges[i][1]).add(edges[i][0]);
         }
-        return left > 0 ? left - 1 : 0;
+        Map<Integer, List<Integer>> dist_root = new HashMap<>();
+        int minDist = Integer.MAX_VALUE;
+        Map<Integer, Integer> mapper = new HashMap<>();
+        for (int i = 0; i < n; i++) {
+            int dist = bfs(graph, i, new boolean[n]);
+            mapper.put(i, dist);
+            if (dist < minDist) {
+                minDist = dist;
+                dist_root.computeIfAbsent(minDist, x -> new ArrayList<>());
+                dist_root.get(minDist).add(i);
+            }
+        }
+        return dist_root.get(minDist);
     }
 
-
-    public ListNode removeElements(ListNode head, int val) {
-        if (head == null) return null;
-        if (head.val == val) head = removeElements(head.next, val);
-        else head.next = removeElements(head.next, val);
-        return head;
-    }
-
-
-    public ListNode insertionSortList(ListNode head) {
-        return head;
+    private static int bfs(Map<Integer, List<Integer>> graph, int src, boolean[] visited ) {
+        if (!graph.containsKey(src)) return 0;
+        int max = 0;
+        visited[src] = true;
+        for (int neighbor : graph.get(src)) {
+            if (!visited[neighbor]) {
+                visited[neighbor] = true;
+                max = Math.max(max, 1 + bfs(graph, neighbor, visited));
+            }
+        }
+        return max;
     }
 
 }
