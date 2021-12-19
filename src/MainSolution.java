@@ -5,50 +5,58 @@ import edu.princeton.cs.algs4.In;
 import java.util.*;
 
 public class MainSolution {
+    void g() {
+        isFifty(10);
+    }
 
     public static void main(String[] args) {
-        int n = 4;
-        int[][] mat = {{1, 0}, {1, 2}, {1, 3}};
-        System.out.println(findMinHeightTrees(n, mat));
+        String s = "100[leetcode]";
+        System.out.println(decodStringHelper(s, 0));
 
     }
 
 
-    public static List<Integer> findMinHeightTrees(int n, int[][] edges) {
-        Map<Integer, List<Integer>> graph = new HashMap<>();
-        int size = edges.length;
-        for (int i = 0; i < size; i++) {
-            graph.computeIfAbsent(edges[i][0], x -> new ArrayList<>());
-            graph.computeIfAbsent(edges[i][1], x -> new ArrayList<>());
-            graph.get(edges[i][0]).add(edges[i][1]);
-            graph.get(edges[i][1]).add(edges[i][0]);
-        }
-        Map<Integer, List<Integer>> dist_root = new HashMap<>();
-        int minDist = Integer.MAX_VALUE;
-        Map<Integer, Integer> mapper = new HashMap<>();
-        for (int i = 0; i < n; i++) {
-            int dist = bfs(graph, i, new boolean[n]);
-            mapper.put(i, dist);
-            if (dist < minDist) {
-                minDist = dist;
-                dist_root.computeIfAbsent(minDist, x -> new ArrayList<>());
-                dist_root.get(minDist).add(i);
-            }
-        }
-        return dist_root.get(minDist);
+    //https://leetcode.com/problems/decode-string/submissions/
+    public String decodeString(String s) {
+        return decodStringHelper(s, 0);
     }
 
-    private static int bfs(Map<Integer, List<Integer>> graph, int src, boolean[] visited ) {
-        if (!graph.containsKey(src)) return 0;
-        int max = 0;
-        visited[src] = true;
-        for (int neighbor : graph.get(src)) {
-            if (!visited[neighbor]) {
-                visited[neighbor] = true;
-                max = Math.max(max, 1 + bfs(graph, neighbor, visited));
-            }
+    private static String decodStringHelper(String s, int i) {
+        if (i < s.length() && s.charAt(i) == ']') i++;
+        if (i >= s.length()) return "";
+        StringBuilder str = new StringBuilder();
+        while (i < s.length() && (Character.isAlphabetic(s.charAt(i)) || s.charAt(i) == ']')) str.append(s.charAt(i++));
+        if (i < s.length() && s.charAt(i) == '[') i++;
+        if (i < s.length()) {
+            StringBuilder number = new StringBuilder();
+            while (i < s.length() && Character.isDigit(s.charAt(i))) number.append(s.charAt(i++));
+            i--;
+            int val = number.length() > 0 ? Integer.parseInt(number.toString()) : 1;
+            String result = decodStringHelper(s, i + 2);
+            String h[] = getRepeatedString(result);
+            for (int v = 0; v < val - 1; v++)
+                str.append(h[0]);
+            str.append(h.length > 1 ? h[0] + h[1] : h[0]);
         }
-        return max;
+        return str.toString();
     }
+
+    private static String[] getRepeatedString(String result) {
+        for (int i = 0; i < result.length(); i++)
+            if (result.charAt(i) == ']')
+                return new String[]{result.substring(0, i), result.substring(i)};
+        return null;
+    }
+
+
+    int isFifty(int n) {
+        // just to make sure that we have positive probebility to find our answer;
+        int bound = n + 51;
+        Random random = new Random();
+        int answer = random.nextInt(bound);
+        while (answer != 50) answer = random.nextInt(bound);
+        return answer;
+    }
+
 
 }
