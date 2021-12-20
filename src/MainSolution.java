@@ -11,43 +11,58 @@ public class MainSolution {
 
     public static void main(String[] args) {
         String s = "100[leetcode]";
-        System.out.println(decodStringHelper(s, 0));
+
 
     }
 
+    class SnapshotArray {
+        Map<Integer, List<Integer>> map;
+        int snap;
 
-    //https://leetcode.com/problems/decode-string/submissions/
-    public String decodeString(String s) {
-        return decodStringHelper(s, 0);
-    }
-
-    private static String decodStringHelper(String s, int i) {
-        if (i < s.length() && s.charAt(i) == ']') i++;
-        if (i >= s.length()) return "";
-        StringBuilder str = new StringBuilder();
-        while (i < s.length() && (Character.isAlphabetic(s.charAt(i)) || s.charAt(i) == ']')) str.append(s.charAt(i++));
-        if (i < s.length() && s.charAt(i) == '[') i++;
-        if (i < s.length()) {
-            StringBuilder number = new StringBuilder();
-            while (i < s.length() && Character.isDigit(s.charAt(i))) number.append(s.charAt(i++));
-            i--;
-            int val = number.length() > 0 ? Integer.parseInt(number.toString()) : 1;
-            String result = decodStringHelper(s, i + 2);
-            String h[] = getRepeatedString(result);
-            for (int v = 0; v < val - 1; v++)
-                str.append(h[0]);
-            str.append(h.length > 1 ? h[0] + h[1] : h[0]);
+        public SnapshotArray(int length) {
+            map = new HashMap<>();
+            snap = 0;
         }
-        return str.toString();
+
+        public void set(int index, int val) {
+            map.computeIfAbsent(index, x -> new ArrayList<>());
+            map.get(index).add(val);
+        }
+
+        public int snap() {
+            return snap++;
+        }
+
+        public int get(int index, int snap_id) {
+            if (snap_id >= map.get(index).size())
+                return map.get(index).get(map.get(index).size() - 1);
+            else return map.get(index).get(snap_id);
+        }
     }
 
-    private static String[] getRepeatedString(String result) {
-        for (int i = 0; i < result.length(); i++)
-            if (result.charAt(i) == ']')
-                return new String[]{result.substring(0, i), result.substring(i)};
-        return null;
-    }
 
+    public List<List<Integer>> minimumAbsDifference(int[] arr) {
+        int n = arr.length;
+        if (n == 2) return new ArrayList(Arrays.asList(Math.min(arr[0], arr[1]), Math.max(arr[0], arr[1])));
+        Arrays.sort(arr);
+        Map<Integer, Set<List<Integer>>> map = new HashMap<>();
+        int min = 999999;
+        for (int i = 1; i < n - 1; i++) {
+            int abs1 = Math.abs(arr[i] - arr[i - 1]);
+            int abs2 = Math.abs(arr[i] - arr[i + 1]);
+            if (min >= abs1) {
+                map.computeIfAbsent(abs1, x -> new HashSet<>());
+                map.get(abs1).add(Arrays.asList(Math.min(arr[i], arr[i - 1]), Math.max(arr[i], arr[i - 1])));
+            }
+            if (min >= abs2) {
+                map.computeIfAbsent(abs2, x -> new HashSet<>());
+                map.get(abs2).add(Arrays.asList(Math.min(arr[i], arr[i + 1]), Math.max(arr[i], arr[i + 1])));
+            }
+            min = Math.min(min, Math.min(abs1, abs2));
+        }
+        // re order the result
+        return new ArrayList<>(map.get(min));
+    }
 
     int isFifty(int n) {
         // just to make sure that we have positive probebility to find our answer;
