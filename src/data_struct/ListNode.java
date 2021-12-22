@@ -8,4 +8,10 @@ public class ListNode {
         this.val = val;
         next = null;
     }
+
+    @Override
+    public String toString() {
+        return val +
+                ", " + next;
+    }
 }
