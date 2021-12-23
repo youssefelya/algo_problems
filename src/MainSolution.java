@@ -1,8 +1,6 @@
 import data_struct.ListNode;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.ArrayList;
+import java.util.*;
 
 public class MainSolution {
 
@@ -10,42 +8,36 @@ public class MainSolution {
     public static void main(String[] args) {
         String s1 = "abac";
         String s2 = "cab";
-        System.out.println(shortestCommonSupersequence(s1, s2));
+
     }
 
 
-    public static String shortestCommonSupersequence(String str1, String str2) {
-        if (str1.equals(str2)) return str1;
-        String s1 = shortestCommonSupersequenceHelper(str1, 0, str2, str2.length() - 1, new int[str1.length()][str2.length()]);
-        String s2 = shortestCommonSupersequenceHelper(str2, 0, str1, str1.length() - 1, new int[str1.length()][str2.length()]);
-        return s1.length() < s2.length() ? s2 : s1;
-    }
-
-    private static String shortestCommonSupersequenceHelper(String str1, int i, String str2, int j, int[][] dp) {
-        if (i >= str1.length() && j < 0) return "";
-        if (i >= str1.length()) return str2;
-        if (j < 0) return str1;
-        String t0 = null;
-        String t1 = null;
-        String t2 = null;
-        String t3 = null;
-        int n1 = 10, n2 = n1, n3 = n1, n0 = 0;
-        if (str1.charAt(i) == str2.charAt(j)) {
-            t0 = str2.charAt(j) + shortestCommonSupersequenceHelper(str1, i + 1, str2, j - 1, dp);
-        } else {
-            t1 = str2.charAt(j) + shortestCommonSupersequenceHelper(str1, i, str2, j - 1, dp);
-            t2 = str1.charAt(i) + shortestCommonSupersequenceHelper(str1, i + 1, str2, j, dp);
-            t3 = str1.charAt(i) + str2.charAt(j) + shortestCommonSupersequenceHelper(str1, i + 1, str2, j - 1, dp);
+    public int[] findOrder(int numCourses, int[][] prerequisites) {
+        Map<Integer, List<Integer>> graph = new HashMap<>();
+        for (int[] array : prerequisites) {
+            graph.computeIfAbsent(array[0], x -> new ArrayList<>());
+            graph.get(array[0]).add(array[1]);
         }
-        n0 = t0 != null ? t0.length() : 9999999;
-        n1 = t1 != null ? t1.length() : 9999999;
-        n2 = t2 != null ? t2.length() : 99999999;
-        n3 = t3 != null ? t3.length() : 99999999;
-        int min = Math.min(Math.min(n1, n0), Math.min(n2, n3));
-        if (min == n1) return t1;
-        return min == n2 ? t2 : min == n3 ? t3 : t0;
+        int[] visited = new int[numCourses];
+        Stack<Integer> stack = new Stack<>();
+        for (int i = 0; i < numCourses; i++)
+            if (visited[i] == 0 && !topologicalSort(graph, i, visited, stack)) return new int[]{};
+        if (stack.size() != numCourses) return new int[]{};
+        return stack.stream().mapToInt(i -> i).toArray();
     }
 
+    static boolean topologicalSort(Map<Integer, List<Integer>> graph, int v, int[] visited, Stack<Integer> stack) {
+        visited[v] = -1;
+        if (graph.containsKey(v))
+            for (int neighbor : graph.get(v)) {
+                if (visited[neighbor] == 0)
+                    topologicalSort(graph, neighbor, visited, stack);
+                else if (visited[neighbor] == -1) return false;
+            }
+        visited[v] = 1;
+        stack.push(v);
+        return true;
+    }
 
     public static int peakIndexInMountainArray(int[] arr) {
         int n = arr.length;
@@ -66,6 +58,7 @@ public class MainSolution {
 
     interface MountainArray {
         int get(int index);
+
         int length();
     }
 
