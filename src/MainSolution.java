@@ -26,7 +26,7 @@ public class MainSolution {
         return stack.stream().mapToInt(i -> i).toArray();
     }
 
-    static boolean topologicalSort(Map<Integer, List<Integer>> graph, int v, int[] visited, Stack<Integer> stack) {
+    boolean topologicalSort(Map<Integer, List<Integer>> graph, int v, int[] visited, Stack<Integer> stack) {
         visited[v] = -1;
         if (graph.containsKey(v))
             for (int neighbor : graph.get(v)) {
