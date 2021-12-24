@@ -1,50 +1,56 @@
 
+import data_struct.ListNode;
+
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 public class MainSolution {
 
 
-    public static void main(String[] args) {
-        String s1 = "abac";
-        String s2 = "cab";
-        System.out.println(s1);
+    public static void main(String[] args) throws InterruptedException {
+        int[][] mat = {{1, 3}, {2, 6}, {8, 10}, {15, 18}};
+        printMat(merge(mat));
+
+
     }
 
-    //https://leetcode.com/problems/word-search-ii/submissions/
-    public List<String> findWords(char[][] board, String[] words) {
-        List<String> answer = new ArrayList<>();
-        Map<Character, List<List<Integer>>> graph = new HashMap<>();
-        for (int i = 0; i < board.length; i++) {
-            for (int j = 0; j < board[i].length; j++) {
-                graph.computeIfAbsent(board[i][j], x -> new ArrayList<>());
-                graph.get(board[i][j]).add(Arrays.asList(i, j));
+    public static int[][] merge(int[][] intervals) {
+        int n = intervals.length;
+        List<int[]> answer = new ArrayList<>();
+        Arrays.sort(intervals, (a, b) -> {
+            if (a[0] == b[0]) return a[1] - b[1];
+            return a[0] - b[0];
+        });
+        int i = 0;
+        while (i < n) {
+            int a = intervals[i][0];
+            int b = intervals[i][1];
+            int index = i + 1;
+            while (index < n && b >= intervals[index][0]) {
+                b = Math.max(intervals[index][1], b);
+                index++;
             }
+            i = index;
+            answer.add(new int[]{a, b});
         }
-        for (String word : words) {
-            if (graph.containsKey(word.charAt(0))) {
-                for (List<Integer> neighbor : graph.get(word.charAt(0)))
-                    if (bfs(word, 0, board, neighbor.get(0), neighbor.get(1))) {
-                        answer.add(word);
-                        break;
-                    }
-            }
+        int[][] result = new int[answer.size()][2];
+        int x = 0;
+        for (int[] arr : answer) {
+            result[x] = arr;
+            x++;
         }
-        return answer;
-    }
-
-    private boolean bfs(String word, int index, char[][] board, int i, int j) {
-        if (index >= word.length()) return true;
-        if (i >= board.length || i < 0 || j >= board[i].length || j < 0 || word.charAt(index) != board[i][j])
-            return false;
-        char t = board[i][j];
-        board[i][j] = '#';
-        boolean result = bfs(word, index + 1, board, i + 1, j) ||
-                bfs(word, index + 1, board, i - 1, j) ||
-                bfs(word, index + 1, board, i, j + 1) ||
-                bfs(word, index + 1, board, i, j - 1);
-        board[i][j] = t;
         return result;
     }
 
+    private static void printMat(int[][] merge) {
+        for (int[] arr : merge) {
+            System.out.println();
+            for (int a : arr)
+                System.out.print(" " + a);
+        }
+        System.out.println();
+    }
 
 }
