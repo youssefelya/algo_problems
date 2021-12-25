@@ -10,47 +10,49 @@ public class MainSolution {
 
 
     public static void main(String[] args) throws InterruptedException {
-        int[][] mat = {{1, 3}, {2, 6}, {8, 10}, {15, 18}};
-        printMat(merge(mat));
-
-
+        String str = "12*22+41/12-23+23*22";
+        String[] array = str.split("\\*|\\/");
+        System.out.println(Arrays.toString(array));
     }
 
-    public static int[][] merge(int[][] intervals) {
-        int n = intervals.length;
-        List<int[]> answer = new ArrayList<>();
-        Arrays.sort(intervals, (a, b) -> {
-            if (a[0] == b[0]) return a[1] - b[1];
-            return a[0] - b[0];
-        });
-        int i = 0;
-        while (i < n) {
-            int a = intervals[i][0];
-            int b = intervals[i][1];
-            int index = i + 1;
-            while (index < n && b >= intervals[index][0]) {
-                b = Math.max(intervals[index][1], b);
-                index++;
+    public int calculate(String s) {
+        s = s.replace(" ", "");
+        int n = s.length();
+        if (n < 1) return 0;
+        if (n == 1) return Character.getNumericValue(s.charAt(0));
+        Stack<Integer> stack = new Stack<>();
+        int answer = 0;
+        while (index < n) {
+            char c = s.charAt(index);
+            if (c == '+') {
+                stack.push(getValue(s, 1));
+            } else if (c == '-') {
+                stack.push(getValue(s, -1));
+            } else if (c == '*') {
+                int prev = stack.pop();
+                stack.add(prev * getValue(s, 1));
+            } else if (c == '/') {
+                int prev = stack.pop();
+                stack.add(prev / getValue(s, 1));
+            } else {
+                stack.push(getValue(s, 1));
             }
-            i = index;
-            answer.add(new int[]{a, b});
         }
-        int[][] result = new int[answer.size()][2];
-        int x = 0;
-        for (int[] arr : answer) {
-            result[x] = arr;
-            x++;
-        }
-        return result;
+        for (int val : stack)
+            answer += val;
+        return answer;
     }
 
-    private static void printMat(int[][] merge) {
-        for (int[] arr : merge) {
-            System.out.println();
-            for (int a : arr)
-                System.out.print(" " + a);
+    int index;
+
+    private Integer getValue(String s, int sign) {
+        if (!Character.isDigit(s.charAt(index))) index++;
+        StringBuilder str = new StringBuilder();
+        while (index < s.length() && Character.isDigit(s.charAt(index))) {
+            str.append(s.charAt(index++));
         }
-        System.out.println();
+        return Integer.parseInt(str.toString()) * sign;
     }
+
 
 }
