@@ -10,49 +10,31 @@ public class MainSolution {
 
 
     public static void main(String[] args) throws InterruptedException {
-        String str = "12*22+41/12-23+23*22";
-        String[] array = str.split("\\*|\\/");
-        System.out.println(Arrays.toString(array));
+        int[] arrray = {1, 5, 11, 5};
     }
 
-    public int calculate(String s) {
-        s = s.replace(" ", "");
-        int n = s.length();
-        if (n < 1) return 0;
-        if (n == 1) return Character.getNumericValue(s.charAt(0));
-        Stack<Integer> stack = new Stack<>();
-        int answer = 0;
-        while (index < n) {
-            char c = s.charAt(index);
-            if (c == '+') {
-                stack.push(getValue(s, 1));
-            } else if (c == '-') {
-                stack.push(getValue(s, -1));
-            } else if (c == '*') {
-                int prev = stack.pop();
-                stack.add(prev * getValue(s, 1));
-            } else if (c == '/') {
-                int prev = stack.pop();
-                stack.add(prev / getValue(s, 1));
-            } else {
-                stack.push(getValue(s, 1));
-            }
+    public int[][] kClosest(int[][] points, int k) {
+        int n = points.length;
+        if (n <= k) return points;
+        int[][] kcloasest = new int[k][2];
+        PriorityQueue<double[]> heap = new PriorityQueue<double[]>((a, b) -> {
+            return a[1] > b[1] ? 1 : -1;
+        });
+        for (int i = 0; i < n; i++) {
+            double dist = distanceFromOrigin(points[i]);
+            heap.add(new double[]{i, dist});
         }
-        for (int val : stack)
-            answer += val;
-        return answer;
-    }
-
-    int index;
-
-    private Integer getValue(String s, int sign) {
-        if (!Character.isDigit(s.charAt(index))) index++;
-        StringBuilder str = new StringBuilder();
-        while (index < s.length() && Character.isDigit(s.charAt(index))) {
-            str.append(s.charAt(index++));
+        int i = 0;
+        while (i < k) {
+            int index = (int) heap.poll()[0];
+            kcloasest[i] = points[index];
+            i++;
         }
-        return Integer.parseInt(str.toString()) * sign;
+        return kcloasest;
     }
 
+    private double distanceFromOrigin(int[] point) {
+        return Math.sqrt(point[0] * point[0] + point[1] * point[1]);
+    }
 
 }
