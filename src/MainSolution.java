@@ -4,54 +4,31 @@ import data_struct.TreeNode;
 import java.util.*;
 
 public class MainSolution {
-
-
     public static void main(String[] args) throws Exception {
-        String s = "1,2,3,4,55,3,null,33,4";
-        System.out.println(s);
-
+        String s = "4321";
+        int k = 4;
+        System.out.println(minInteger(s, k));
     }
 
-    // Encodes a tree to a single string.
-    public static String serialize(TreeNode root) {
-        if (root == null)
-            return null;
-        Stack<TreeNode> stack = new Stack<>();
-        stack.push(root);
-        List<String> list = new ArrayList<>();
-        while (!stack.isEmpty()) {
-            TreeNode t = stack.pop();
-            if (t == null) {
-                list.add("#");
-            } else {
-                list.add("" + t.val);
-                stack.push(t.right);
-                stack.push(t.left);
-            }
-        }
-        return String.join(",", list);
+    /*
+    4321 -- > 3421  -> 3241 --> 3214  -->
+    4321 -- > 3421  -> 3412 --> 3142  -->
+     */
+    public static String minInteger(String num, int k) {
+        return minIntegerHelper(num, 0, k);
     }
 
-    static int t;
-    public static TreeNode deserialize(String data) {
-        if (data == null)
-            return null;
-        t = 0;
-        String[] arr = data.split(",");
-        return deserializeHelper(arr);
-    }
-
-    public static TreeNode deserializeHelper(String[] arr) {
-        if (arr[t].equals("#"))
-            return null;
-        // create node with this item and recur for children
-        TreeNode root
-                = new TreeNode(Integer.parseInt(arr[t]));
-        t++;
-        root.left = deserializeHelper(arr);
-        t++;
-        root.right = deserializeHelper(arr);
-        return root;
+    private static String minIntegerHelper(String num, int i, int k) {
+        if (i >= num.length() - 1 || k == 0) return num;
+        int v0 = i > 0 ? Character.getNumericValue(num.charAt(i - 1)) : -1;
+        int v1 = Character.getNumericValue(num.charAt(i));
+        int v2 = Character.getNumericValue(num.charAt(i + 1));
+        if (v0 != -1 && v0 > v1)
+            return minIntegerHelper(num.substring(0, i - 1) + v1 + "" + v0 + num.substring(i + 1), i + 1, k - 1);
+        else if (v2 < v1)
+            return minIntegerHelper(num.substring(0, i) + v2 + "" + v1 + num.substring(i + 2), i + 1, k - 1);
+        else
+            return minIntegerHelper(num, i + 1, k);
     }
 
 
