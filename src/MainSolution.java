@@ -4,31 +4,22 @@ import data_struct.TreeNode;
 import java.util.*;
 
 public class MainSolution {
-    public static void main(String[] args) throws Exception {
-        String s = "4321";
-        int k = 4;
-        System.out.println(minInteger(s, k));
+
+    public static void main(String[] args) {
+
     }
 
-    /*
-    4321 -- > 3421  -> 3241 --> 3214  -->
-    4321 -- > 3421  -> 3412 --> 3142  -->
-     */
-    public static String minInteger(String num, int k) {
-        return minIntegerHelper(num, 0, k);
+    public int maxAncestorDiff(TreeNode root) {
+        if (root == null) return 0;
+        int v1 = bfs(root.left, root.val, root.val);
+        int v2 = bfs(root.right, root.val, root.val);
+        return Math.max(v1, v2);
     }
 
-    private static String minIntegerHelper(String num, int i, int k) {
-        if (i >= num.length() - 1 || k == 0) return num;
-        int v0 = i > 0 ? Character.getNumericValue(num.charAt(i - 1)) : -1;
-        int v1 = Character.getNumericValue(num.charAt(i));
-        int v2 = Character.getNumericValue(num.charAt(i + 1));
-        if (v0 != -1 && v0 > v1)
-            return minIntegerHelper(num.substring(0, i - 1) + v1 + "" + v0 + num.substring(i + 1), i + 1, k - 1);
-        else if (v2 < v1)
-            return minIntegerHelper(num.substring(0, i) + v2 + "" + v1 + num.substring(i + 2), i + 1, k - 1);
-        else
-            return minIntegerHelper(num, i + 1, k);
+    private int bfs(TreeNode root, int min, int max) {
+        if (root == null) return max - min;
+        return Math.max(bfs(root.left, Math.min(min, root.val), Math.max(max, root.val)),
+                bfs(root.right, Math.min(min, root.val), Math.max(max, root.val)));
     }
 
 
