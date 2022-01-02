@@ -10,6 +10,7 @@ public class MainSolution {
 
     }
 
+
     //https://leetcode.com/problems/longest-palindromic-substring/
     public String longestPalindrome(String s) {
         int n = s.length();
