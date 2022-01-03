@@ -27,4 +27,22 @@ public class Solution {
         return ans + cnt[0] * (cnt[0] - 1) / 2 + cnt[30] * (cnt[30] - 1) / 2;
     }
 
+    public int findJudge(int n, int[][] trust) {
+        Map<Integer, List<Integer>> graph = new HashMap<>();
+        Map<Integer, List<Integer>> map = new HashMap<>();
+        List<Integer> possibleSolution = new ArrayList<>();
+        for (int[] arr : trust) {
+            graph.computeIfAbsent(arr[1], x -> new ArrayList<>());
+            map.computeIfAbsent(arr[0], x -> new ArrayList<>());
+            graph.get(arr[1]).add(arr[0]);
+            map.get(arr[0]).add(arr[1]);
+            if (graph.get(arr[1]).size() == n - 1)
+                possibleSolution.add(arr[1]);
+
+        }
+        for (int key : possibleSolution)
+            if (!map.containsKey(key)) return key;
+        return -1;
+    }
+
 }
