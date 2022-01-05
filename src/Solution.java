@@ -1,37 +1,42 @@
 
 
 
-import java.lang.reflect.Array;
 import java.util.*;
 
 public class Solution {
 
-    static List<String> list = new ArrayList<>();
-    static Vector<String> vector = new Vector<>();
-
-    static class Threading extends Thread {
-
-        @Override
-        public void run() {
-            for (int i = 0; i < 3; i++) {
-                list.add(Thread.currentThread().getName() + "_" );
-                vector.add(Thread.currentThread().getName() + "_" );
-                System.out.print(i + " ");
-            }
-        }
-    }
-
 
     public static void main(String[] args) throws InterruptedException {
-        Threading tr = new Threading();
-        Threading tr2 = new Threading();
-        tr.start();
-        tr2.start();
+        String s = "bbb";
+   //     System.out.println(partition(s));
+    }
 
-        Thread.sleep(3000);
-        System.out.println();
-        System.out.println("list : "+list);
-        System.out.println("vector : " + vector);
+    public List<List<String>> partition(String s) {
+        List<String> res = new ArrayList<String>();
+        return dfs(s, res);
+    }
+    public static List<List<String>> dfs(String s, List<String> prevString) {
+        List<List<String>> res = new ArrayList<List<String>>();
+        for (int i = 1; i <= s.length(); i++) {
+            if (isPalindrome(s.substring(0, i))) {
+                List<String> set = new ArrayList<String>(prevString);
+                set.add(s.substring(0, i));
+                if (i == s.length())
+                    res.add(set);
+                else
+                    res.addAll(dfs(s.substring(i), set));
+            }
+        }
+        return res;
+    }
+    public static boolean isPalindrome(String s) {
+        if (s.length() == 1)
+            return true;
+        for (int i = 0; i < s.length() / 2; i++) {
+            if (s.charAt(s.length() - 1 - i) != s.charAt(i))
+                return false;
+        }
+        return true;
     }
 
 
