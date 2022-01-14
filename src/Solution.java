@@ -1,64 +1,67 @@
 
 
-import java.util.ArrayList;
-import java.util.List;
+
+import java.util.*;
 
 public class Solution {
 
 
-    public static void main(String[] args) {
-        String abc = "abc";
-        String cde = null;
-        System.out.println("abc".equalsIgnoreCase(cde));
-
+    public static void main(String[] args) throws InterruptedException {
+        int[][] mat = {{2, 1, 5}, {3, 5, 7}};
+        int capacity = 3;
+        System.out.println(carPooling(mat, capacity));
     }
 
-    static List<int[]> list;
+    public static boolean carPooling(int[][] trips, int capacity) {
+        int i = 0, n = trips.length;
+        Arrays.sort(trips, (a, b) -> a[1] - b[1]);
+        PriorityQueue<int[]> heap = new PriorityQueue<>((a, b) -> a[2] - b[2]);
+        int currentCapacity = 0;
+        while (i < n) {
+            int numPassage = trips[i][0];
+            int from = trips[i][1];
+            int to = trips[i][2];
+            while (heap.size() > 0 && heap.peek()[2] <= from) {
+                currentCapacity -= heap.peek()[0];
+                heap.poll();
+            }
 
-    public static void MyCalendarTwo() {
-        list = new ArrayList<>();
+            currentCapacity += numPassage;
+            heap.add(trips[i]);
+            if (currentCapacity > capacity) return false;
+            i++;
+        }
+        return true;
     }
 
-    public static boolean book(int start, int end) {
-        int index = findRightPosition(list, start, end);
-        list.add(index, new int[]{start, end});
-        return tripleBooking(list, index);
-
-
+    public List<List<String>> partition(String s) {
+        List<String> res = new ArrayList<String>();
+        return dfs(s, res);
     }
 
-    private static boolean tripleBooking(List<int[]> list, int index) {
-        //[10, 20], [50, 60], [10, 40], [5, 15], [5, 10], [25, 55]]
-        if (list.size() < 3) return true;
-        int prevIndex = index > 0 ? index - 1 : index + 1;
-        int nextIndex = index < list.size() - 1 ? index + 1 : index - 1;
-        if (nextIndex == prevIndex) return false;
-        int a1 = list.get(index)[0], a2 = list.get(prevIndex)[0], a3 = list.get(nextIndex)[0];
-        int b1 = list.get(index)[1], b2 = list.get(prevIndex)[1], b3 = list.get(nextIndex)[0];
-        return Math.max(a1, Math.max(a2, a3)) > Math.min(b1, Math.min(b2, b3));
-
-    }
-
-    private static int findRightPosition(List<int[]> list, int start, int end) {
-        int size = list.size();
-        if (size == 0)
-            return 0;
-        int low = 0, high = size - 1;
-        while (low <= high) {
-            int mid = low + (high - low) / 2;
-
-            int a = list.get(mid)[0];
-            int b = list.get(mid)[1];
-
-            if (a == start) {
-                if (b < end) low = mid + 1;
-                else high = mid - 1;
-            } else {
-                if (a < start) low = mid + 1;
-                else high = mid - 1;
+    public static List<List<String>> dfs(String s, List<String> prevString) {
+        List<List<String>> res = new ArrayList<List<String>>();
+        for (int i = 1; i <= s.length(); i++) {
+            if (isPalindrome(s.substring(0, i))) {
+                List<String> set = new ArrayList<String>(prevString);
+                set.add(s.substring(0, i));
+                if (i == s.length())
+                    res.add(set);
+                else
+                    res.addAll(dfs(s.substring(i), set));
             }
         }
-        return high + 1;
+        return res;
+    }
+
+    public static boolean isPalindrome(String s) {
+        if (s.length() == 1)
+            return true;
+        for (int i = 0; i < s.length() / 2; i++) {
+            if (s.charAt(s.length() - 1 - i) != s.charAt(i))
+                return false;
+        }
+        return true;
     }
 
 

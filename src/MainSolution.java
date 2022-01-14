@@ -1,77 +1,36 @@
-import data_struct.ListNode;
-import data_struct.TreeNode;
-import edu.princeton.cs.algs4.In;
 
-import java.util.*;
+
 
 public class MainSolution {
-    void g() {
-        isFifty(10);
-    }
-
     public static void main(String[] args) {
-        String s = "100[leetcode]";
-
-
     }
 
-    class SnapshotArray {
-        Map<Integer, List<Integer>> map;
-        int snap;
-
-        public SnapshotArray(int length) {
-            map = new HashMap<>();
-            snap = 0;
+    public int myAtoi(String s) {
+        if (s.length() == 0) return 0;
+        boolean neg = false;
+        int i = 0;
+        while (i < s.length() && s.charAt(i) == ' ') i++;
+        if (i == s.length()) return 0;
+        if (s.charAt(i) == '+') {
+            i++;
+        } else if (s.charAt(i) == '-') {
+            neg = true;
+            i++;
         }
-
-        public void set(int index, int val) {
-            map.computeIfAbsent(index, x -> new ArrayList<>());
-            map.get(index).add(val);
-        }
-
-        public int snap() {
-            return snap++;
-        }
-
-        public int get(int index, int snap_id) {
-            if (snap_id >= map.get(index).size())
-                return map.get(index).get(map.get(index).size() - 1);
-            else return map.get(index).get(snap_id);
-        }
-    }
-
-
-    public List<List<Integer>> minimumAbsDifference(int[] arr) {
-        int n = arr.length;
-        if (n == 2) return new ArrayList(Arrays.asList(Math.min(arr[0], arr[1]), Math.max(arr[0], arr[1])));
-        Arrays.sort(arr);
-        Map<Integer, Set<List<Integer>>> map = new HashMap<>();
-        int min = 999999;
-        for (int i = 1; i < n - 1; i++) {
-            int abs1 = Math.abs(arr[i] - arr[i - 1]);
-            int abs2 = Math.abs(arr[i] - arr[i + 1]);
-            if (min >= abs1) {
-                map.computeIfAbsent(abs1, x -> new HashSet<>());
-                map.get(abs1).add(Arrays.asList(Math.min(arr[i], arr[i - 1]), Math.max(arr[i], arr[i - 1])));
+        char zero = '0';
+        int sum = 0;
+        while (i < s.length() && s.charAt(i) >= '0' && s.charAt(i) <= '9') {
+            int val = s.charAt(i) - zero;
+            if (!neg && (sum > Integer.MAX_VALUE / 10
+                    || (sum == Integer.MAX_VALUE / 10 && val >= 7))) {
+                return Integer.MAX_VALUE;
+            } else if (neg && (-sum < Integer.MIN_VALUE / 10
+                    || (-sum == Integer.MIN_VALUE / 10 && val >= 8))) {
+                return Integer.MIN_VALUE;
             }
-            if (min >= abs2) {
-                map.computeIfAbsent(abs2, x -> new HashSet<>());
-                map.get(abs2).add(Arrays.asList(Math.min(arr[i], arr[i + 1]), Math.max(arr[i], arr[i + 1])));
-            }
-            min = Math.min(min, Math.min(abs1, abs2));
+            sum = sum * 10 + val;
+            i++;
         }
-        // re order the result
-        return new ArrayList<>(map.get(min));
+        return neg ? -sum : sum;
     }
-
-    int isFifty(int n) {
-        // just to make sure that we have positive probebility to find our answer;
-        int bound = n + 51;
-        Random random = new Random();
-        int answer = random.nextInt(bound);
-        while (answer != 50) answer = random.nextInt(bound);
-        return answer;
-    }
-
-
 }
