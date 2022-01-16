@@ -1,36 +1,33 @@
 
 
+import java.util.*;
 
 public class MainSolution {
     public static void main(String[] args) {
+        int[] array = {0, 0, 1};
+        System.out.println(maxDistToClosest(array));
     }
 
-    public int myAtoi(String s) {
-        if (s.length() == 0) return 0;
-        boolean neg = false;
-        int i = 0;
-        while (i < s.length() && s.charAt(i) == ' ') i++;
-        if (i == s.length()) return 0;
-        if (s.charAt(i) == '+') {
-            i++;
-        } else if (s.charAt(i) == '-') {
-            neg = true;
+    public static int maxDistToClosest(int[] seats) {
+        int n = seats.length;
+        if (n == 2) return 1;
+        int i = 0, ans = 0;
+        int start = 0;
+        while (seats[i] == 0) {
+            ans++;
             i++;
         }
-        char zero = '0';
-        int sum = 0;
-        while (i < s.length() && s.charAt(i) >= '0' && s.charAt(i) <= '9') {
-            int val = s.charAt(i) - zero;
-            if (!neg && (sum > Integer.MAX_VALUE / 10
-                    || (sum == Integer.MAX_VALUE / 10 && val >= 7))) {
-                return Integer.MAX_VALUE;
-            } else if (neg && (-sum < Integer.MIN_VALUE / 10
-                    || (-sum == Integer.MIN_VALUE / 10 && val >= 8))) {
-                return Integer.MIN_VALUE;
+        while (i < n) {
+            if (seats[i] == 1) {
+                ans = Math.max(ans, (i - start) / 2);
+                start = i;
             }
-            sum = sum * 10 + val;
             i++;
+            if (i == n) {
+                ans = Math.max(ans, (i - 1 - start));
+            }
         }
-        return neg ? -sum : sum;
+        return ans;
     }
+
 }
