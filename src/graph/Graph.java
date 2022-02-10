@@ -1,7 +1,6 @@
 package graph;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class Graph {
     private class Edge {
@@ -38,13 +37,13 @@ public class Graph {
     }
 
     public void connect(int src, int dest, int cost) {
-        graph.computeIfAbsent(src, x -> new HashSet<>());
+      //  graph.computeIfAbsent(src, x -> new HashSet<>());
         graph.get(src).add(new Edge(dest, cost));
     }
 
     public List<Integer> getNeighbors(int src) {
         if (!graph.containsKey(src) || graph.get(src).size() < 1) return new ArrayList<>();
-        return graph.get(src).stream().map(edge -> edge.dest).collect(Collectors.toList());
+        return null;// graph.get(src).stream().map(edge -> edge.dest).collect(Collectors.toList());
     }
 
     public Set<Edge> getEdgeNeighbors(int src) {
@@ -76,7 +75,7 @@ public class Graph {
 
     public Boolean dijkstra(int src, int dest) {
         Set<Edge> visited = new HashSet<>();
-        PriorityQueue<Edge> heap = new PriorityQueue<>((a, b) -> a.cost - b.cost);
+        PriorityQueue<Edge> heap = null;//new PriorityQueue<>((a, b) -> a.cost - b.cost);
         int dist = 0;
         heap.addAll(graph.get(src));
         while (!heap.isEmpty()) {
