@@ -9,7 +9,7 @@ public class CharacterThread extends Thread {
             c++;
             if (c > 'z') c = 'a';
             try {
-                Thread.sleep(100);
+                Thread.sleep(900);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
