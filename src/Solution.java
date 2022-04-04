@@ -1,48 +1,45 @@
-import multiThread.SearchArray;
-import test.CharacterThread;
-import test.DigitThread;
-
-import java.time.ZoneId;
-import java.time.ZoneOffset;
-import java.time.ZonedDateTime;
 import java.util.*;
 
 public class Solution {
 
 
     public static void main(String[] args) {
-        new Thread(new CharacterThread()).start();
-        new Thread(new DigitThread()).start();
+        FreqStack freqStack = new FreqStack();
+//[[],[5],[7],[5],[7],[4],[5],[],[],[],[]]
+        freqStack.push(5);
+        freqStack.push(7);
+        freqStack.push(5);
+        freqStack.push(7);
+        freqStack.push(4);
+        freqStack.push(5);
+
+        System.out.println(freqStack.pop());
+        System.out.println(freqStack.pop());
+        System.out.println(freqStack.pop());
+        System.out.println(freqStack.pop());
+
     }
 
-    public void nextPermutation(int[] nums) {
-        int i = nums.length - 2;
-        while (i >= 0 && nums[i] >= nums[i + 1]) {
-            i--;
+    static class FreqStack {
+        PriorityQueue<int[]> maxHeap;
+        Map<Integer, Integer> visited;
+        int currentIndex = 0;
+        public FreqStack() {
+            currentIndex = 0;
+            maxHeap = new PriorityQueue<>((a, b) -> a[1] == b[1] ? b[2] - a[2] : b[1] - a[1]);
+            visited = new HashMap<>();
         }
-        if (i >= 0) {
-            int last = nums.length - 1;
-            while (last >= 0 && nums[i] >= nums[last]) {
-                last--;
-            }
-            swap(nums, last, i);
+        public void push(int val) {
+            int freq = visited.getOrDefault(val, 0);
+            maxHeap.add(new int[]{val, freq + 1, currentIndex});
+            visited.put(val, freq + 1);
+            currentIndex++;
         }
-        reverse(nums, i + 1);
 
-    }
-
-    public void swap(int[] nums, int i, int j) {
-        int temp = nums[i];
-        nums[i] = nums[j];
-        nums[j] = temp;
-    }
-
-    public void reverse(int[] nums, int start) {
-        int end = nums.length - 1;
-        while (start < end) {
-            swap(nums, start, end);
-            start++;
-            end--;
+        public int pop() {
+            int[] toExplore = maxHeap.poll();
+            visited.put(toExplore[0], toExplore[1] - 1);
+            return toExplore[0];
         }
     }
 
