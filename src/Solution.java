@@ -4,20 +4,6 @@ public class Solution {
 
 
     public static void main(String[] args) {
-        FreqStack freqStack = new FreqStack();
-//[[],[5],[7],[5],[7],[4],[5],[],[],[],[]]
-        freqStack.push(5);
-        freqStack.push(7);
-        freqStack.push(5);
-        freqStack.push(7);
-        freqStack.push(4);
-        freqStack.push(5);
-
-        System.out.println(freqStack.pop());
-        System.out.println(freqStack.pop());
-        System.out.println(freqStack.pop());
-        System.out.println(freqStack.pop());
-
     }
 
     static class FreqStack {
