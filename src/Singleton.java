@@ -1,18 +1,21 @@
-import java.util.Date;
-
 public class Singleton {
+
+    private String getHelper() {
+        return "Hello";
+    }
 
     // ....
     private static Singleton instance;
 
-    private Singleton() {
-    }
+    public Singleton(){}
 
-    private static class SingletonHolder {
-        public static final Singleton INSTANCE = new Singleton();
+    public static int findDuplicate(){
+        return Integer.MAX_VALUE;
     }
+    private static class SingletonHolder { public static final Singleton INSTANCE = new Singleton();}
 
     public static Singleton getInstance() {
+        int v = findDuplicate();
         return SingletonHolder.INSTANCE;
     }
 }

@@ -6,7 +6,6 @@ public class MainSolution {
         for (int i = 0; i < 4; i++) {
             new Multithreading().start();
         }
-
     }
     static class Multithreading extends Thread {
         public void run() {
@@ -17,8 +16,3 @@ public class MainSolution {
 
 
 
-/*
-
-
-
- */

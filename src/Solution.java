@@ -1,38 +1,30 @@
 
 import java.util.*;
-import java.util.stream.Collectors;
 
-public class Solution {
+public class Solution extends Singleton {
 
 
     public static void main(String[] args) {
-        int[] array = {1,2,3,1};
-        System.out.println(rob(array));
+        int[] books = {1, 2, 3, 4};
+        int[] books2 = {0, 1, 1, 2, 3, 4};
+        System.out.println(8 + (8 * 5 * 0.75));
     }
 
-    public static int rob(int[] nums) {
+    public int[] topKFrequent(int[] nums, int k) {
         int n = nums.length;
-        int[] dp = new int[n];
-        for (int i = 0; i < n; i++) {
-            if (i == 0) dp[i] = nums[i];
-            else {
-                int v = i - 2 >= 0 ? dp[i - 2] : 0;
-                dp[i] = Math.max(dp[i - 1], dp[i - 2] + nums[i]);
-            }
+        PriorityQueue<int[]> heap = new PriorityQueue<>((a, b) -> b[1] - a[1]);
+        int[] answer = new int[k];
+        Map<Integer, Integer> mapNumFreq = new HashMap<>();
+        for (int num : nums) mapNumFreq.put(num, mapNumFreq.getOrDefault(num, 0) + 1);
+        for (int key : mapNumFreq.keySet())
+            heap.add(new int[]{key, mapNumFreq.get(key)});
+        int i = 0;
+        while (k > 0 && heap.size() > 0) {
+            answer[i] = heap.poll()[0];
+            i++;
+            k--;
         }
-        return dp[n-1];
-    }
-
-    public int lastStoneWeight(int[] stones) {
-        PriorityQueue<Integer> maxHeap = new PriorityQueue<>(Collections.reverseOrder());
-        for (int a : stones) maxHeap.add(a);
-        while (maxHeap.size() > 1) {
-            int stone1 = maxHeap.poll();
-            int stone2 = maxHeap.poll();
-            int diff = Math.abs(stone1 - stone2);
-            if (diff != 0) maxHeap.add(diff);
-        }
-        return maxHeap.size() > 0 ? maxHeap.peek() : 0;
+        return answer;
     }
 
 }
