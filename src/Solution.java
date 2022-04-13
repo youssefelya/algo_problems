@@ -5,27 +5,35 @@ public class Solution extends Singleton {
 
 
     public static void main(String[] args) {
-        int val1 = 5;
-        int val2 = 2;
-        double division = (double) val1 / val2;
-        System.out.println(division);
+        int n = 6;
+        for(int[] arr : generateMatrix(n))
+            System.out.println(Arrays.toString(arr));
     }
 
-    static boolean isInteger(double value) {
-        return value - (int) value == 0;
-    }
-
-    public static int consecutiveNumbersSum(int n) {
-        int answer = 0;
-        for (int k = 1; k < n; k++) {
-            double division = (double) (n - k * (k - 1) / 2) / k;
-            if (isValidNumber(division)) answer++;
+    public static int[][] generateMatrix(int n) {
+        int[][] mat = new int[n][n];
+        int val = 1;
+        int toLeft = 0, topRight = n - 1, bottomLeft = 0, bottomRight = n - 1;
+        int i, j = 0;
+        while (toLeft <= topRight) {
+            i = toLeft;
+            toLeft++;
+            while (j <= topRight) mat[i][j++] = val++;
+            topRight--;
+            j--;
+            i++;
+            while (i <= bottomRight) mat[i++][j] = val++;
+            bottomRight--;
+            i--;
+            j--;
+            while (j >= bottomLeft) mat[i][j--] = val++;
+            bottomLeft++;
+            j++;
+            i--;
+            while (i >= toLeft) mat[i--][j] = val++;
+            j++;
         }
-        return answer;
-    }
-
-    private static boolean isValidNumber(double division) {
-        return division > 0 && division - (int) division == 0;
+        return mat;
     }
 
 }
