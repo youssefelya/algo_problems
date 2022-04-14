@@ -5,56 +5,42 @@ public class Solution extends Singleton {
 
 
     public static void main(String[] args) {
-        char[][] grid = {
-                {'1', '1', '0', '0', '0'},
-                {'1', '1', '0', '0', '0'},
-                {'0', '0', '1', '0', '0'},
-                {'0', '0', '0', '1', '1'}
-        };
-        System.out.println(numIslands(grid));
+        String strs[] = {"abc", "efg"};
+        String s = "abcefg";
 
     }
 
-    public static int numIslands(char[][] grid) {
-        int m = grid.length, n = grid[0].length;
-        boolean[][] visited = new boolean[m][n];
-        int answer = 0;
-        for (int i = 0; i < m; i++) {
-            for (int j = 0; j < n; j++) {
-                if (grid[i][j] == '0' || visited[i][j]) continue;
-                answer++;
-                traverseNode(grid, i, j, visited);
-            }
-        }
-        return answer;
+
+    Map<String, Integer> visited;
+
+    public int maxProfit(int[] prices) {
+        visited = new HashMap<>();
+        return maxProfitHelper(prices, 0, false, 0);
     }
 
-    private static void traverseNode(char[][] grid, int i, int j, boolean[][] visited) {
-        Queue<int[]> queue = new ArrayDeque<>();
-        queue.add(new int[]{i, j});
-        while (queue.size() > 0) {
-            int[] nodeToExplore = queue.poll();
-            int currentI = nodeToExplore[0];
-            int currentJ = nodeToExplore[1];
-            if (visited[currentI][currentJ] || grid[currentI][currentJ] == '0') continue;
-            visited[currentI][currentJ] = true;
-            queue.addAll(getNodeNeighbors(grid, currentI, currentJ, visited));
-        }
+  /*  public int maxProfit(int[] prices, int fee) {
+        visited = new HashMap<>();
+        return maxProfitHelper(prices, 0, false, fee);
     }
+   */
 
-    private static Queue<int[]> getNodeNeighbors(char[][] grid, int currentI, int currentJ, boolean[][] visited) {
-        int[][] mat = {{1, 0}, {0, 1}, {-1, 0}, {0, -1}};
-        Queue<int[]> queue = new ArrayDeque<>();
-        for (int[] arr : mat) {
-            int nextI = currentI + arr[0];
-            int nextJ = currentJ + arr[1];
-
-            if (nextI < grid.length && nextI >= 0 && !visited[nextI][currentJ])
-                queue.add(new int[]{nextI, currentJ});
-            if (nextJ < grid[0].length && nextJ >= 0 && !visited[currentI][nextJ])
-                queue.add(new int[]{currentI, nextJ});
+    private int maxProfitHelper(int[] prices, int i, boolean hasStock, int fee) {
+        if (i >= prices.length) return 0;
+        String key = i + ":" + hasStock;
+        if (visited.containsKey(key))
+            return visited.get(key);
+        int res = 0;
+        if (hasStock) {
+            int sell = maxProfitHelper(prices, i + 2, false, fee) + prices[i] - fee;
+            int notSell = maxProfitHelper(prices, i + 1, true, fee);
+            res = Math.max(sell, notSell);
+        } else {
+            int buy = maxProfitHelper(prices, i + 1, true, fee) - prices[i];
+            int notBuy = maxProfitHelper(prices, i + 1, false, fee);
+            res = Math.max(res, Math.max(buy, notBuy));
         }
-        return queue;
+        visited.put(key, res);
+        return res;
     }
 
 }
