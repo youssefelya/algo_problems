@@ -2,7 +2,7 @@
 
 checkout the branch structure, feat/problem_name 
 
-Example : feat/revere_linkedlist 
+Example : feat/reverse_linkedlist 
 
 
 
