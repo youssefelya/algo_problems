@@ -8,38 +8,36 @@ public class Solution extends Singleton {
 
 
     public static void main(String[] args) {
-        TreeNode root = new TreeNode(4);
-        root.left = new TreeNode(1);
-        root.right = new TreeNode(6);
 
-        root.left.left = new TreeNode(0);
-        root.left.right = new TreeNode(2);
-        root.left.right.right = new TreeNode(3);
-
-        root.right.left = new TreeNode(5);
-        root.right.right = new TreeNode(7);
-        root.right.right.right = new TreeNode(8);
-
-        System.out.println(convertBST(root));
     }
+    /*
+    1,     2, 3, 5
+       2
+    2 ,    3, 4,5
+       3
+    3
 
-    public static TreeNode convertBST(TreeNode root) {
-        if (root == null) return null;
-        return convertBSTHelper(root);
+     [   ]
+     */
+
+    public int nthUglyNumber(int n) {
+        List<Integer> list = new ArrayList<>();
+        int i = 0, j = 0, k = 0;
+        list.add(1);
+        n--;
+        while (n > 0) {
+            int v1 = list.get(i) * 2;
+            int v2 = list.get(j) * 3;
+            int v3 = list.get(k) * 5;
+            int min = Math.min(v1, Math.min(v2, v3));
+            list.add(min);
+            if (min == v1) i++;
+            if (min == v2) j++;
+            if (min == v3) k++;
+            n--;
+        }
+        return list.get(list.size() - 1);
     }
-
-    static int sumSoFat = 0;
-
-    private static TreeNode convertBSTHelper(TreeNode root) {
-        if (root == null) return null;
-        if (root.right != null)
-            root.right = convertBSTHelper(root.right);
-        sumSoFat += root.val;
-        root.val = sumSoFat;
-        root.left = convertBSTHelper(root.left);
-        return root;
-    }
-
 }
 
 
