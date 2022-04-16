@@ -1,5 +1,6 @@
 
 import data_struct.ListNode;
+import data_struct.TreeNode;
 
 import java.util.*;
 
@@ -7,46 +8,36 @@ public class Solution extends Singleton {
 
 
     public static void main(String[] args) {
-        int[][] course1 = {{1, 4}, {2, 4}, {3, 1}, {3, 2}};
+        TreeNode root = new TreeNode(4);
+        root.left = new TreeNode(1);
+        root.right = new TreeNode(6);
 
-        int[][] course = {{1, 0}, {2, 6}, {1, 7}, {6, 4}, {7, 0}, {0, 5}};
-        System.out.println(Arrays.toString(findOrder(8, course)));
+        root.left.left = new TreeNode(0);
+        root.left.right = new TreeNode(2);
+        root.left.right.right = new TreeNode(3);
+
+        root.right.left = new TreeNode(5);
+        root.right.right = new TreeNode(7);
+        root.right.right.right = new TreeNode(8);
+
+        System.out.println(convertBST(root));
     }
 
-
-    public static int[] findOrder(int numCourses, int[][] prerequisites) {
-        Map<Integer, List<Integer>> graph = new HashMap<>();
-        int n = prerequisites.length;
-        for (int i = 0; i < n; i++)
-            graph.computeIfAbsent(prerequisites[i][0], x -> new ArrayList<>()).add(prerequisites[i][1]);
-        Queue<Integer> course = new ArrayDeque<>();
-        Set<Integer> visited = new HashSet<>();
-        for (int i = 0; i < numCourses; i++) {
-            if (!visited.contains(i))
-                dfs(graph, i, course, visited);
-        }
-        if (course.size() != numCourses) return new int[]{};
-        int[] arr = new int[numCourses];
-        for (int i = 0; i < numCourses; i++) arr[i] = course.poll();
-        return arr;
+    public static TreeNode convertBST(TreeNode root) {
+        if (root == null) return null;
+        return convertBSTHelper(root);
     }
 
-    static void dfs(Map<Integer, List<Integer>> graph, int src, Queue<Integer> course, Set<Integer> visited) {
+    static int sumSoFat = 0;
 
-        if (!graph.containsKey(src) || course.containsAll(graph.get(src))) {
-            course.add(src);
-        } else {
-            if (graph.containsKey(src))
-                for (int neighbor : graph.get(src)) {
-                    if (!visited.contains(neighbor)) {
-                        visited.add(neighbor);
-                        dfs(graph, neighbor, course, visited);
-                    }
-                }
-            if (!graph.containsKey(src) || course.containsAll(graph.get(src))) {
-                course.add(src);
-            }
-        }
+    private static TreeNode convertBSTHelper(TreeNode root) {
+        if (root == null) return null;
+        if (root.right != null)
+            root.right = convertBSTHelper(root.right);
+        sumSoFat += root.val;
+        root.val = sumSoFat;
+        root.left = convertBSTHelper(root.left);
+        return root;
     }
 
 }
