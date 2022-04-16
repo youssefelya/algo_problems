@@ -20,23 +20,17 @@ public class Solution extends Singleton {
      [   ]
      */
 
-    public int nthUglyNumber(int n) {
-        List<Integer> list = new ArrayList<>();
-        int i = 0, j = 0, k = 0;
-        list.add(1);
-        n--;
-        while (n > 0) {
-            int v1 = list.get(i) * 2;
-            int v2 = list.get(j) * 3;
-            int v3 = list.get(k) * 5;
-            int min = Math.min(v1, Math.min(v2, v3));
-            list.add(min);
-            if (min == v1) i++;
-            if (min == v2) j++;
-            if (min == v3) k++;
-            n--;
+    public List<Integer> getRow(int rowIndex) {
+        ArrayList<Integer> result = new ArrayList<Integer>();
+        if (rowIndex < 0) return result;
+        result.add(1);
+        for (int i = 1; i <= rowIndex; i++) {
+            for (int j = result.size() - 2; j >= 0; j--) {
+                result.set(j + 1, result.get(j) + result.get(j + 1));
+            }
+            result.add(1);
         }
-        return list.get(list.size() - 1);
+        return result;
     }
 }
 
