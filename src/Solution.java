@@ -1,4 +1,5 @@
-public class Solution extends Singleton {
+import java.util.List;
+public class Solution {
 
 
     public static void main(String[] args) {
@@ -8,28 +9,24 @@ public class Solution extends Singleton {
     }
 
 
-    public int minFallingPathSum(int[][] A) {
-        int row = A.length;
-        int col = A[0].length;
-        int ans = 10000000;
-        dp = new int[row + 1][col + 1];
-        for (int j = 0; j < col; j++) {
-            int sum = minFallingPathSumHelper(A, 0, j, row, col);
-            ans = Math.min(ans, sum);
-        }
-        return ans;
-    }
+    public int minimumTotal(List<List<Integer>> triangle) {
+        int n = triangle.size();
+        int[] dp = new int[n];
 
-    int[][] dp;
-    private int minFallingPathSumHelper(int[][] A, int i, int j, int row, int col) {
-        if (i == row) return 0;
-        if (j < 0 || j >= col) return Integer.MAX_VALUE;
-        if (dp[i][j] != 0) return dp[i][j];
-        int sum1 = minFallingPathSumHelper(A, i + 1, j, row, col);
-        int sum2 = minFallingPathSumHelper(A, i + 1, j + 1, row, col);
-        int sum3 = minFallingPathSumHelper(A, i + 1, j - 1, row, col);
-        dp[i][j] = A[i][j] + Math.min(sum1, Math.min(sum2, sum3));
-        return dp[i][j];
+        List<Integer> li = triangle.get(n - 1);
+
+        for (int i = 0; i < n; i++) {
+            dp[i] = li.get(i);
+        }
+
+        for (int i = n - 2; i >= 0; i--) {
+            li = triangle.get(i);
+            for (int j = 0; j < i + 1; j++) {
+                dp[j] = li.get(j) + Math.min(dp[j], dp[j + 1]);
+            }
+        }
+
+        return dp[0];
     }
 }
 
