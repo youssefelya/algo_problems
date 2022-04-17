@@ -1,50 +1,40 @@
-
-import data_struct.ListNode;
-import data_struct.TreeNode;
-
-import java.util.*;
-import java.util.stream.Collectors;
-
 public class Solution extends Singleton {
 
 
     public static void main(String[] args) {
         int n = 3;
         int[][] mat = {{0, 0, 1}, {4, 3, 7}, {1, 0, 3}};
-        System.out.println(arrayStrength(n, mat));
+
     }
 
-    static String equalSums(String s) {
-        int n = s.length();
-        int leftSum = s.charAt(0) - 'a', rightSum = 0, i = 1, j = n - 1;
-        while (i < j) {
-            if (leftSum > rightSum) {
-                leftSum += s.charAt(i);
-                i++;
-            } else {
-                leftSum += s.charAt(j);
-                j--;
-            }
+
+    public int minFallingPathSum(int[][] A) {
+        int row = A.length;
+        int col = A[0].length;
+        int ans = 10000000;
+        dp = new int[row + 1][col + 1];
+        for (int j = 0; j < col; j++) {
+            int sum = minFallingPathSumHelper(A, 0, j, row, col);
+            ans = Math.min(ans, sum);
         }
-        return s.charAt(i) + "";
+        return ans;
     }
 
-    public static String arrayStrength(int n, int[][] A) {
-        List<Integer> list = new ArrayList<>();
-        for (int i = 0; i < n; i++) {
-            int numNonZero = 0;
-            int sumRow = 0;
-            for (int j = 0; j < A[i].length; j++) {
-                if (A[i][j] != 0) numNonZero++;
-                sumRow += A[i][j];
-            }
-            list.add(sumRow % (1 + numNonZero));
-        }
-
-        return list.stream().map(x -> "" + x).collect(Collectors.joining(" "));
+    int[][] dp;
+    private int minFallingPathSumHelper(int[][] A, int i, int j, int row, int col) {
+        if (i == row) return 0;
+        if (j < 0 || j >= col) return Integer.MAX_VALUE;
+        if (dp[i][j] != 0) return dp[i][j];
+        int sum1 = minFallingPathSumHelper(A, i + 1, j, row, col);
+        int sum2 = minFallingPathSumHelper(A, i + 1, j + 1, row, col);
+        int sum3 = minFallingPathSumHelper(A, i + 1, j - 1, row, col);
+        dp[i][j] = A[i][j] + Math.min(sum1, Math.min(sum2, sum3));
+        return dp[i][j];
     }
-
 }
+
+
+
 
 
 
