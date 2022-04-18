@@ -1,6 +1,6 @@
 # Algorithm problems,
 
-checkout the branch structure, feat/problem_name 
+checkout the branch structure, feat/problemName 
 
 Example : feat/reverseLinkedlist 
 
