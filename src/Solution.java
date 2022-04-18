@@ -1,4 +1,7 @@
-import java.util.List;
+import data_struct.TreeNode;
+
+import java.util.*;
+
 public class Solution {
 
 
@@ -8,26 +11,24 @@ public class Solution {
 
     }
 
-
-    public int minimumTotal(List<List<Integer>> triangle) {
-        int n = triangle.size();
-        int[] dp = new int[n];
-
-        List<Integer> li = triangle.get(n - 1);
-
-        for (int i = 0; i < n; i++) {
-            dp[i] = li.get(i);
-        }
-
-        for (int i = n - 2; i >= 0; i--) {
-            li = triangle.get(i);
-            for (int j = 0; j < i + 1; j++) {
-                dp[j] = li.get(j) + Math.min(dp[j], dp[j + 1]);
-            }
-        }
-
-        return dp[0];
+    public int kthSmallest(TreeNode root, int k) {
+        if (root == null) return -1;
+        list = new ArrayList<>();
+        kthSmallestHelper(root, k);
+        return list.get(k - 1);
     }
+
+    List<Integer> list;
+
+    private void kthSmallestHelper(TreeNode root, int k) {
+        if (k == list.size()) return;
+        if (root == null) return;
+        if (root.left != null) kthSmallestHelper(root.left, k);
+        list.add(root.val);
+        kthSmallestHelper(root.right, k);
+    }
+
+
 }
 
 
