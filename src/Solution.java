@@ -1,31 +1,31 @@
 
-import data_struct.ListNode;
 import data_struct.TreeNode;
 
-import javax.swing.*;
-import java.util.*;
+import java.util.Arrays;
 
-public class Solution extends Singleton {
+public class Solution {
 
 
     public static void main(String[] args) {
-        int[][] mat = {
-                {1, 2, 3},
-                {2, 3, 1},
-                {1, 6, 3}};
-
+        int m = 2;
+        int n = 2;
+        System.out.println(uniquePaths(m, n));
 
     }
 
-    public long[] sumOfThree(long num) {
-        double result = ((double) num - 3) / 3;
-        long ans = (long) result;
-        if (isLong(result)) return new long[]{ans, ans + 1, ans + 2};
-        return new long[]{};
-    }
+    public static int uniquePaths(int m, int n) {
+        if (n == 1 && m == 1) return 1;
+        int dp[][] = new int[m][n];
+        dp[0][0] = 0;
+        for (int i = 1; i < n; i++) dp[0][i] = 1;
+        for (int i = 1; i < m; i++) dp[i][0] = 1;
 
-    private boolean isLong(double result) {
-        return (long) result == result;
+        for (int i = 1; i < m; i++) {
+            for (int j = 1; j < n; j++) {
+                dp[i][j] = dp[i - 1][j] + dp[i][j - 1];
+            }
+        }
+        return dp[m - 1][n - 1];
     }
 
 

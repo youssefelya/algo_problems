@@ -8,7 +8,11 @@ public class TreeNode {
         this.val = val;
     }
 
-    public TreeNode() {
+    public TreeNode() {}
 
+    @Override
+    public String toString() {
+        return val + " l=" + left +
+                ", r=" + right;
     }
 }
