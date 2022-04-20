@@ -15,6 +15,10 @@ public class Singleton {
     private static class SingletonHolder { public static final Singleton INSTANCE = new Singleton();}
 
     public static Singleton getInstance() {
+
+
+
+
         int v = findDuplicate();
         return SingletonHolder.INSTANCE;
     }
