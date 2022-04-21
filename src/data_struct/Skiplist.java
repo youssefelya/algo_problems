@@ -23,11 +23,8 @@ class Node {
 }
 
 public class Skiplist {
-    /*
-     * These are starting pointers. They are always from top layer.
-     */
+
     private Node head;
-    //  private Node tail;
 
     public Skiplist() {
         head = new Node(Integer.MIN_VALUE);
@@ -44,7 +41,6 @@ public class Skiplist {
             }
             curr = curr.down;
         }
-
         return curr;
     }
 
@@ -55,25 +51,18 @@ public class Skiplist {
             while (current.right != null && current.right.val < data) {
                 current = current.right;
             }
-
             pointersToUpdate.add(current);
             current = current.down;
         }
-
-        // insert after this node.
         int level = 0;
         Node newNode = null;
-
         while (level == 0 || pureRandomChoice()) {
-            // now move up.
             if (newNode == null) {
                 newNode = new Node(data);
             } else {
                 newNode = new Node(newNode);
             }
-
             Node nodeToUpdate;
-
             if (pointersToUpdate.size() <= level) {
                 createNewLayer();
                 nodeToUpdate = this.head;
@@ -99,7 +88,7 @@ public class Skiplist {
             while (curr.right != null && curr.right.val < data) {
                 curr = curr.right;
             }
-            if (curr.right.val == data) {
+            if (curr.right != null && curr.right.val == data) {
                 pointersToUpdate.add(curr);
             }
             curr = curr.down;
@@ -131,7 +120,6 @@ public class Skiplist {
     private boolean pureRandomChoice() {
         return Math.random() >= 0.5;
     }
-
 
 
 }
