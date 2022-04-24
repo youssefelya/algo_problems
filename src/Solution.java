@@ -1,36 +1,32 @@
-
-
-
-import data_struct.TreeNode;
-
-import java.util.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Solution {
 
 
-    public static void main(String[] args) {
-        String s = "j?qg??b";
-        System.out.println(modifyString(s));
-
+    public static void main(String[] args) throws IOException {
+        int[] arr = {1, 2, 5};
+        int amount = 11;
+        //System.out.println(coinChange(arr, amount));
     }
 
-
-    public static String modifyString(String s) {
-        int n = s.length();
-        StringBuilder str = new StringBuilder();
-        char prevChar = '#';
-        for (int i = 0; i < n; i++) {
-            if (s.charAt(i) == '?') {
-                char c = 'a';
-                while (c == prevChar || (i + 1 < n && c == s.charAt(i + 1))) c++;
-                str.append(c);
-                prevChar = c;
-            } else {
-                str.append(s.charAt(i));
-                prevChar = s.charAt(i);
+    public int coinChange(int[] coins, int amount) {
+        Arrays.sort(coins);
+        int[] dp = new int[amount + 1];
+        Arrays.fill(dp, amount + 1);
+        dp[0] = 0;
+        for (int am = 0; am <= amount; am++) {
+            for (int i = 0; i < coins.length; i++) {
+                if (am >= coins[i]) {
+                    dp[am] = Math.min(dp[am], 1 + dp[am - coins[i]]);
+                } else break;
             }
         }
-        return str.toString();
+        return dp[amount] > amount ? -1 : dp[amount];
     }
 
 
