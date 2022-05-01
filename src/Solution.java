@@ -1,66 +1,58 @@
-import java.io.BufferedReader;
+
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.util.*;
 
 public class Solution {
 
 
     public static void main(String[] args) throws IOException {
-        char[][] arr = {
-                {'f', 'a', 'a', 'c', 'b'},
-                {'e', 'a', 'a', 'e', 'c'},
-                {'c', 'f', 'b', 'b', 'b'},
-                {'c', 'e', 'a', 'b', 'e'},
-                {'f', 'e', 'f', 'b', 'f'}};
-        //  System.out.println(containsCycle(arr));
+        String s = "abcedfgh";
+        System.out.println("abc".contains(s));
     }
 
+    public int minCostConnectPoints(int[][] points) {
+        return KruskalAlgorithm(points);
+    }
 
-    private boolean[][] visited;
-    private final int[] dx = {0, 1, 0, -1};
-    private final int[] dy = {1, 0, -1, 0};
-
-    public boolean containsCycle(char[][] grid) {
-        int m = grid.length;
-        int n = grid[0].length;
-        visited = new boolean[m][n];
-
-        for (int i = 0; i < m; i++) {
-            for (int j = 0; j < n; j++) {
-                if (!visited[i][j]) {
-                    if (dfs(grid, i, j, i, j)) return true;
+    private int KruskalAlgorithm(int[][] points) {
+        Map<Integer, List<int[]>> graph = new HashMap<>();
+        int n = points.length; // node count
+        for (int i = 0; i < n; i++) {
+            int[] point2 = points[i];
+            for (int j = i + 1; j < n; j++) {
+                int[] point1 = points[j];
+                int dist = Math.abs(point2[0] - point1[0]) + Math.abs(point2[1] - point1[1]);
+                int[] edge1 = new int[]{i, j, dist};
+                int[] edge2 = new int[]{j, i, dist};
+                graph.computeIfAbsent(i, k -> new ArrayList<>()).add(edge1);
+                graph.computeIfAbsent(j, k -> new ArrayList<>()).add(edge2);
+            }
+        }
+        PriorityQueue<int[]> heap = new PriorityQueue<>((a, b) -> a[2] - b[2]); // pg for edges sorted by cost minHeap
+        Set<Integer> visited = new HashSet<>(); // Set to record nodes pushed in mst
+        int cost = 0;
+        if (graph.isEmpty()) return cost;
+        visited.add(0);
+        // add all edges for node 0
+        heap.addAll(graph.get(0));
+        while (!heap.isEmpty()) {
+            // get current min weight
+            int[] curMinEdgeToExplore = heap.poll();
+            int nextNode = curMinEdgeToExplore[1];
+            if (!visited.contains(nextNode)) {
+                visited.add(nextNode);
+                cost += curMinEdgeToExplore[2];
+                // add all edges for next node
+                for (int[] edge : graph.get(nextNode)) {
+                    // we need to check if node already in tree here as well to avoid adding duplicate edges to save time
+                    if (!visited.contains(edge[1])) {
+                        heap.add(edge);
+                    }
                 }
             }
         }
-
-        return false;
+        return visited.size() == n ? cost : -1;
     }
-
-    private boolean dfs(char[][] grid, int x, int y, int lastX, int lastY) {
-
-        visited[x][y] = true;
-
-        for (int i = 0; i < 4; i++) {
-            int xx = x + dx[i];
-            int yy = y + dy[i];
-            if (inArea(grid, xx, yy) && grid[xx][yy] == grid[x][y]) {
-                if (!visited[xx][yy]) {
-                    if (dfs(grid, xx, yy, x, y))
-                        return true;
-                } else if (xx != lastX || yy != lastY) {
-                    return true;
-                }
-            }
-        }
-
-        return false;
-    }
-
-    private boolean inArea(char[][] grid, int x, int y) {
-        return !(x < 0 || x >= grid.length || y < 0 || y >= grid[0].length);
-    }
-
 
 }
 
