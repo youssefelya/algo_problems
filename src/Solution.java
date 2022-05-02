@@ -8,30 +8,22 @@ public class Solution {
 
 
     public static void main(String[] args) throws IOException {
-        String s = "abcedfgh";
-        System.out.println("abc".contains(s));
-    }
-
-    public ListNode removeNthFromEnd(ListNode head, int n) {
-        ListNode temp = head;
-        ListNode temp2 = head;
-        while (n > 0) {
-            temp2 = temp2.next;
-            n--;
-        }
-        if (temp2 == null) {
-            return head.next;
-        }
-        while (temp2.next != null) {
-            temp = temp.next;
-            temp2 = temp2.next;
-        }
-        ListNode a = temp.next;
-        ListNode b = a.next;
-        temp.next = b;
-        return head;
 
     }
+
+    public int[] sortArrayByParity(int[] nums) {
+        int n = nums.length;
+        int[] array = new int[n];
+        int evenIndex = 0;
+        for (int i = 0; i < n; i++) {
+            if (nums[i] % 2 == 0) array[evenIndex++] = nums[i];
+        }
+        for (int i = 0; i < n; i++) {
+            if (nums[i] % 2 == 1) array[evenIndex++] = nums[i];
+        }
+        return array;
+    }
+
 }
 
 
