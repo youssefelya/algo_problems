@@ -31,6 +31,7 @@ public class GamesOnArrays {
         }
         for (int j = 0; j < (1 << lenBy2); j++) {
             int size = 0;
+            //thios i
             int leftSum = 0;
             int rightSum = 0;
             for (int i = lenBy2 - 1, mask = j; mask > 0; i--, mask >>= 1) {
