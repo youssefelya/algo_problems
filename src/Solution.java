@@ -8,24 +8,30 @@ public class Solution {
 
 
     public static void main(String[] args) throws IOException {
-        int[] array = {2, 6, 4, 8, 10, 9, 15};
-        System.out.println(findUnsortedSubarray(array));
+        Map<Integer, Integer> map = new HashMap<>();
+        map.put(12, 12);
     }
-    public static int findUnsortedSubarray(int[] nums) {
-        int lo = -1, hi = nums.length - 1;
-        int mn = Integer.MAX_VALUE;
-        for (int i = nums.length - 1; i >= 0; i--) {
-            mn = Math.min(mn, nums[i]);
-            if (nums[i] > mn)
-                lo = i;
+
+    public List<String> letterCombinations(String digits) {
+        if (digits.length() < 1) return new ArrayList<>();
+        List<String> list = new ArrayList<>();
+        String[] strs = {"", "abc", "def", "ghi", "jkl", "mno", "pqrs", "tuv", "wxyz"};
+        letterCombinationsHelper(digits, 0, strs, new StringBuilder(), list);
+        return list;
+    }
+
+    private void letterCombinationsHelper(String digits, int i, String[] array, StringBuilder str, List<String> list) {
+        if (i > digits.length()) return;
+        if (str.length() == digits.length()) {
+            list.add(str.toString());
+            return;
         }
-        int mx = Integer.MIN_VALUE;
-        for (int i = 0; i < nums.length; i++) {
-            mx = Math.max(mx, nums[i]);
-            if (nums[i] < mx)
-                hi = i;
+        int val = Character.getNumericValue(digits.charAt(i));
+        for (char c : array[val - 1].toCharArray()) {
+            str.append(c);
+            letterCombinationsHelper(digits, i + 1, array, str, list);
+            str.deleteCharAt(str.length() - 1);
         }
-        return lo == -1 ? 0 : hi - lo + 1;
     }
 
 
