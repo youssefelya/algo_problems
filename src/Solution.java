@@ -1,41 +1,38 @@
 
-import data_struct.ListNode;
 
-import java.io.IOException;
 import java.util.*;
 
 public class Solution {
 
 
-    public static void main(String[] args) throws IOException {
-        Map<Integer, Integer> map = new HashMap<>();
-        map.put(12, 12);
+    public static void main(String[] args) {
+
     }
 
-    public List<String> letterCombinations(String digits) {
-        if (digits.length() < 1) return new ArrayList<>();
-        List<String> list = new ArrayList<>();
-        String[] strs = {"", "abc", "def", "ghi", "jkl", "mno", "pqrs", "tuv", "wxyz"};
-        letterCombinationsHelper(digits, 0, strs, new StringBuilder(), list);
-        return list;
+    public List<List<Integer>> combinationSum3(int k, int n) {
+        if (k > n) return new ArrayList<>();
+        List<List<Integer>> answer = new ArrayList<>();
+        getCombo(1,k,n,new ArrayList<Integer>());
+        return ans;
     }
-
-    private void letterCombinationsHelper(String digits, int i, String[] array, StringBuilder str, List<String> list) {
-        if (i > digits.length()) return;
-        if (str.length() == digits.length()) {
-            list.add(str.toString());
+    private List<List<Integer>> ans = new ArrayList<>();
+    private void getCombo(int i, int k, int target, List<Integer> al) {
+        if (target == 0 && al.size() == k) {
+            ans.add(new ArrayList<>(al));
             return;
         }
-        int val = Character.getNumericValue(digits.charAt(i));
-        for (char c : array[val - 1].toCharArray()) {
-            str.append(c);
-            letterCombinationsHelper(digits, i + 1, array, str, list);
-            str.deleteCharAt(str.length() - 1);
+        if (i <= 9 && target > 0) {
+            getCombo(i + 1, k, target, al);
+            al.add(i);
+            getCombo(i + 1, k, target - i, al);
+            al.remove(al.size() - 1);
         }
     }
 
 
 }
+
+
 
 
 
