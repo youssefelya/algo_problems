@@ -8,6 +8,16 @@ import java.util.*;
 
 public class GamesOnArrays {
 
+    public static String solve(int width, int height, int length, int mass) {
+        int max = 1000000;
+        boolean p1 = width * height * length >= max ||
+                width >= 150 &&
+                        height >= 150 &&
+                        length >= 150;
+        boolean p2 = mass >= 20;
+        return p2&&p1 ? "REJECTED"  : p2 ? "SPECIAL" : "STANDARD";
+    }
+
 
     public static void main(String[] args) throws IOException {
         BufferedReader bf = new BufferedReader(new InputStreamReader(System.in));
