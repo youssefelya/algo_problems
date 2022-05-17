@@ -1,3 +1,5 @@
+import data_struct.TreeNode;
+
 import java.util.*;
 
 class Child {
@@ -12,7 +14,13 @@ class Child {
 
 public class Solution {
     public static void main(String[] args) {
+        HashMap<Integer, Integer> map = new HashMap<>();
+        map.put(1, 1);
+        Vector<Integer> vector = new Vector<>();
+        ArrayList<Integer> list = new ArrayList<>();
+        vector.add(1);
 
+        System.out.println(map.get(1));
         int[][] A = {
                 {0, 1, 1, 0, 0, 0},
                 {0, 1, 0, 1, 1, 0},
@@ -21,43 +29,20 @@ public class Solution {
                 {1, 1, 1, 1, 1, 0},
                 {1, 1, 1, 1, 1, 0}
         };
-        System.out.println(shortestPathBinaryMatrix(A));
     }
 
-    /*
-                       i-1,j   i-1
-                       i,j
+    public final TreeNode getTargetCopy(final TreeNode original,
+                                        final TreeNode cloned,
+                                        final TreeNode target) {
 
-
-     */
-    public static int shortestPathBinaryMatrix(int[][] grid) {
-        if (grid[0][0] != 0) return -1;
-        int row = grid.length, col = grid[0].length;
-        int[][] direction = {{0, 1}, {1, 0}, {1, 1}, {0, -1}, {-1, 0}, {-1, -1},{-1,1},{1,-1}};
-        Queue<int[]> queue = new ArrayDeque<>();
-        Set<String> visited = new HashSet<>();
-        queue.add(new int[]{0, 0, 1});
-        while (queue.size() > 0) {
-            int[] toExplore = queue.poll();
-            int currentI = toExplore[0];
-            int currentJ = toExplore[1];
-            int currentCost = toExplore[2];
-            if (currentI == row - 1 && currentJ == col - 1) return currentCost;
-            for (int[] dir : direction) {
-                int nextI = dir[0] + currentI;
-                int nextJ = dir[1] + currentJ;
-                String key = nextI + "#" + nextJ;
-                if (nextI >= 0 && nextI < row && nextJ >= 0 && nextJ < col && !visited.contains(key)
-                        && grid[nextI][nextJ] == 0) {
-                    visited.add(key);
-                    queue.add(new int[]{nextI, nextJ, currentCost + 1});
-                }
-            }
-        }
-        return -1;
+        if (original == null || target == null) return null;
+        TreeNode temporary = null;
+        if (original.val == target.val) return cloned;
+        temporary = getTargetCopy(original.left, cloned.left, target);
+        if(temporary != null)return temporary;
+        temporary = getTargetCopy(original.right, cloned.right, target);
+        return temporary;
     }
-
-
 }
 
 
