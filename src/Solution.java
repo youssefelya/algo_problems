@@ -7,30 +7,28 @@ public class Solution {
 
 
     public static void main(String[] args) {
-        System.out.println("");
+
     }
 
-    int maxHeight = Integer.MIN_VALUE;
-    int height = 0;
-    int maxSum = 0;
-    public int deepestLeavesSum(TreeNode root) {
-        inorderDFS(root, height);
-        return maxSum;
-    }
-
-    public void inorderDFS(TreeNode root, int height) {
-        if (root == null) return;
-        height += 1;
-        inorderDFS(root.left, height);
-        if (root.left == null && root.right == null) { // Node is leaf
-            if (maxHeight < height) {
-                maxHeight = height;
-                maxSum = root.val;
-            } else if (maxHeight == height) {
-                maxSum = maxSum + root.val;
+    public int countSubstrings(String s) {
+        int n = s.length();
+        int count = 0;
+        for (int i = 0; i < n; i++) {
+            for (int j = 1; j < n; j++) {
+                if (isPalandrom(s, i, j)) count++;
             }
         }
-        inorderDFS(root.right, height);
+        return count;
+    }
+
+    private boolean isPalandrom(String s, int i, int j) {
+        if (j - i == 1) return true;
+        while (i < j) {
+            if (s.charAt(i) != s.charAt(j)) return false;
+            i++;
+            j--;
+        }
+        return true;
     }
 
 
