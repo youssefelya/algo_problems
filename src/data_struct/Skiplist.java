@@ -4,32 +4,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-class Node {
-    public int val;
 
-    public Node left;
-    public Node right;
-    public Node up;
-    public Node down;
-
-    public Node(int val) {
-        this.val = val;
-    }
-
-    public Node(Node lowerLevelNode) {
-        this.val = lowerLevelNode.val;
-        this.down = lowerLevelNode;
-    }
-}
 
 public class Skiplist {
-
     private Node head;
-
     public Skiplist() {
         head = new Node(Integer.MIN_VALUE);
     }
-
     public Node search(int val) {
         Node curr = head;
         while (curr != null) {
@@ -43,7 +24,6 @@ public class Skiplist {
         }
         return curr;
     }
-
     public boolean insert(int data) {
         List<Node> pointersToUpdate = new ArrayList<>();
         Node current = head;
@@ -69,7 +49,6 @@ public class Skiplist {
             } else {
                 nodeToUpdate = pointersToUpdate.get(pointersToUpdate.size() - level - 1);
             }
-
             // insert
             newNode.right = nodeToUpdate.right;
             newNode.left = nodeToUpdate;
@@ -80,7 +59,6 @@ public class Skiplist {
         }
         return true;
     }
-
     public boolean delete(int data) {
         List<Node> pointersToUpdate = new ArrayList<>();
         Node curr = this.head;
@@ -106,7 +84,6 @@ public class Skiplist {
 
         return true;
     }
-
     private void createNewLayer() {
         Node newHead = new Node(Integer.MIN_VALUE);
         Node newTail = new Node(Integer.MAX_VALUE);
@@ -116,10 +93,24 @@ public class Skiplist {
         newHead.down = head;
         head = newHead;
     }
-
     private boolean pureRandomChoice() {
         return Math.random() >= 0.5;
     }
-
-
 }
+class Node {
+    public int val;
+    public Node left;
+    public Node right;
+    public Node up;
+    public Node down;
+
+    public Node(int val) {
+        this.val = val;
+    }
+
+    public Node(Node lowerLevelNode) {
+        this.val = lowerLevelNode.val;
+        this.down = lowerLevelNode;
+    }
+}
+
