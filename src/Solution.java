@@ -8,24 +8,47 @@ public class Solution {
     public static void main(String[] args) {
     }
 
-    public void merge(int[] nums1, int m, int[] nums2, int n) {
-        int i = m - 1, j = n - 1;
-        int index = nums1.length - 1;
-        while (index >= 0) {
-            if (j < 0) {
-                nums1[index] = nums1[i];
-                i--;
-            } else if (i < 0) {
-                nums1[index] = nums2[j];
-                j--;
-            } else if (nums1[i] > nums2[j]) {
-                nums1[index] = nums1[i];
-                i--;
-            } else {
-                nums1[index] = nums2[j];
-                j--;
-            }
-            index--;
+
+    public Node copyRandomList(Node head) {
+        if (head == null) return null;
+        map = new HashMap<>();
+        Node temp = copyNode(head);
+        Node t = temp;
+        while (head != null) {
+            if (map.containsKey(t.val))
+                t.random = map.get(t.val);
+            t = t.next;
+            head = head.next;
+        }
+        return temp;
+    }
+
+    Map<Integer, Node> map;
+
+    private Node copyNode(Node head) {
+        if (head == null) ;
+        Node t = new Node(head.val);
+        t.next = copyNode(head.next);
+        map.put(head.val, t);
+        return t;
+    }
+
+
+    Set<Integer> set = new HashSet<>();
+
+    public boolean findTarget(TreeNode root, int k) {
+        if (root == null) return false;
+        if (set.contains(root.val)) return true;
+        set.add(k - root.val);
+        return findTarget(root.left, k) || findTarget(root.right, k);
+    }
+
+    static class Node {
+        Node next;
+        Node random;
+        int val;
+
+        public Node(int val) {
         }
     }
 
